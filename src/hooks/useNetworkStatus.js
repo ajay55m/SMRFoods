@@ -10,11 +10,10 @@ const useNetworkStatus = () => {
 
   const isCompletelyOffline = netInfo.isConnected === false;
   
-  const isSlow = netInfo.type === 'cellular' && 
-                 (netInfo.details?.cellularGeneration === '2g' || netInfo.details?.cellularGeneration === '3g');
+  const isSlow = false; // Slow network blocking removed
                  
-  // Online if not completely offline and not slow
-  const isOnline = !isCompletelyOffline && !isSlow;
+  // Online if not completely offline
+  const isOnline = !isCompletelyOffline;
 
   return { isOnline, isSlow, isCompletelyOffline };
 };

@@ -12,7 +12,7 @@ class MainActivity : ReactActivity() {
     override fun getMainComponentName(): String = "SMRFoods"
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+        super.onCreate(null)
         // Extra insurance to make sure debugging is on
         WebView.setWebContentsDebuggingEnabled(true)
     }

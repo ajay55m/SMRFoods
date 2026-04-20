@@ -35,21 +35,9 @@ const NoInternetConnectionWrapper = ({
   const { isOnline, isSlow: networkIsSlow } = useNetworkStatus() || { isOnline: true, isSlow: false };
   const [showOnlinePopup, setShowOnlinePopup] = useState(false);
   const [wasOffline, setWasOffline] = useState(false);
-  const [timeoutSlow, setTimeoutSlow] = useState(false);
 
-  const isSlow = networkIsSlow || timeoutSlow;
-
-  useEffect(() => {
-    let timer;
-    if (isLoading) {
-      timer = setTimeout(() => {
-        setTimeoutSlow(true);
-      }, 15000);
-    } else {
-      setTimeoutSlow(false);
-    }
-    return () => clearTimeout(timer);
-  }, [isLoading]);
+  // Slow network and timeout blocking removed
+  const isSlow = false;
 
   // Animations for the green online popup
   const slideOnline = useRef(new Animated.Value(-80)).current;

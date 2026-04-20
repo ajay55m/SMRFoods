@@ -5,6 +5,7 @@ import {
 } from 'react-native';
 import { WebView } from 'react-native-webview';
 import { useFocusEffect } from '@react-navigation/native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { useAuth } from '../context/AuthContext';
 import { parseCookies, autoLogin } from '../services/authService';
@@ -168,7 +169,7 @@ export default function WebViewScreen() {
       headerOffset={Platform.OS === 'ios' ? 50 : 45} // Align popup below appHeader
       isLoading={loading}
     >
-      <View style={styles.container}>
+      <SafeAreaView style={styles.container} edges={['top', 'bottom']}>
         <StatusBar barStyle="dark-content" backgroundColor="#FFFFFF" />
 
         {/* Header Area for App Navigation */}
@@ -218,6 +219,7 @@ export default function WebViewScreen() {
           domStorageEnabled
           sharedCookiesEnabled
           thirdPartyCookiesEnabled
+          mixedContentMode="always"
           cacheEnabled={true}
           cacheMode="LOAD_DEFAULT"
           incognito={false}
@@ -245,7 +247,7 @@ export default function WebViewScreen() {
             />
           </View>
         )}
-      </View>
+      </SafeAreaView>
     </NoInternetConnectionWrapper>
   );
 }
@@ -258,6 +260,7 @@ const styles = StyleSheet.create({
     ...StyleSheet.absoluteFillObject,
     backgroundColor: '#F9FAFB',
     padding: 20,
+    paddingTop: 20,
   },
   skeletonContainer: {
     flex: 1,
@@ -281,8 +284,8 @@ const styles = StyleSheet.create({
   loadingText: { marginTop: 12, fontSize: 14, color: '#6B7280' },
   appHeader: {
     backgroundColor: '#F5F5DC',
-    paddingTop: Platform.OS === 'ios' ? 44 : 5,
-    paddingBottom: 5,
+    paddingTop: 10,
+    paddingBottom: 10,
     paddingHorizontal: 15,
     flexDirection: 'row',
     justifyContent: 'space-between',

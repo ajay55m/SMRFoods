@@ -1,9 +1,10 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import {
   View, Text, TextInput, TouchableOpacity, StyleSheet,
   ActivityIndicator, KeyboardAvoidingView, Platform,
-  ScrollView, Animated, StatusBar, Alert, Image,
+  ScrollView, Animated, StatusBar, Alert, Image, Linking,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { useAuth } from '../context/AuthContext';
 import { loginUser } from '../services/authService';
@@ -20,6 +21,51 @@ export default function LoginScreen() {
   const [focusedInput, setFocusedInput] = useState(null);
 
   const shakeAnim = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    const checkAppUpdate = async () => {
+      try {
+        // Quick store scrape or API check for play store update
+        const response = await fetch('https://play.google.com/store/apps/details?id=com.smrfoods');
+        if (response.ok) {
+          const text = await response.text();
+          const match = text.match(/\[\[\["(\d+\.\d+\.\d+)"\]\]/);
+          
+          if (match && match[1]) {
+            const storeVersion = match[1];
+            const currentVersion = '1.0.5';
+
+            const isUpdateAvailable = (store, current) => {
+              const sParts = store.split('.').map(Number);
+              const cParts = current.split('.').map(Number);
+              for (let i = 0; i < Math.max(sParts.length, cParts.length); i++) {
+                const sVal = sParts[i] || 0;
+                const cVal = cParts[i] || 0;
+                if (sVal > cVal) return true;
+                if (sVal < cVal) return false;
+              }
+              return false;
+            };
+            
+            if (isUpdateAvailable(storeVersion, currentVersion)) {
+              Alert.alert(
+                'Update Available',
+                `A new version (${storeVersion}) is available. Please update the app for the best experience.`,
+                [
+                  { text: 'Later', style: 'cancel' },
+                  { text: 'Update Now', onPress: () => Linking.openURL('market://details?id=com.smrfoods') },
+                ]
+              );
+            }
+          }
+        }
+      } catch (e) {
+        // Silently fail if offline or Play Store blocks it
+        console.log('Update check skipped or failed');
+      }
+    };
+    checkAppUpdate();
+  }, []);
   const passwordRef = useRef(null);
 
   const shake = () => {
@@ -58,8 +104,9 @@ export default function LoginScreen() {
 
   return (
     <NoInternetConnectionWrapper onRetry={handleLogin}>
-      <KeyboardAvoidingView style={styles.flex} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-        <StatusBar barStyle="dark-content" backgroundColor="#FFFFFF" translucent={false} />
+      <SafeAreaView style={styles.flex} edges={['top', 'bottom']}>
+        <KeyboardAvoidingView style={styles.flex} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+          <StatusBar barStyle="dark-content" backgroundColor="#FFFFFF" translucent={false} />
         <View style={styles.background} />
 
         <ScrollView contentContainerStyle={styles.container} keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false}>
@@ -131,11 +178,14 @@ export default function LoginScreen() {
                   </View>
                 }
               </TouchableOpacity>
+
+              <Text style={styles.versionText}>App Version 1.0.5</Text>
             </Animated.View>
 
           </View>
-        </ScrollView>
-      </KeyboardAvoidingView>
+          </ScrollView>
+        </KeyboardAvoidingView>
+      </SafeAreaView>
     </NoInternetConnectionWrapper>
   );
 }
@@ -186,4 +236,12 @@ const styles = StyleSheet.create({
   btnContent: { flexDirection: 'row', alignItems: 'center' },
   btnText: { fontSize: 15, fontWeight: 'bold', color: '#fff', marginRight: 6 },
   btnIcon: { fontSize: 16, color: '#fff' },
+  versionText: {
+    textAlign: 'center',
+    marginTop: 24,
+    fontSize: 12,
+    color: '#9CA3AF',
+    fontWeight: '500',
+    letterSpacing: 0.5,
+  },
 });
