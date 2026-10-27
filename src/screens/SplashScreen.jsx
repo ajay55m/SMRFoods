@@ -1,36 +1,31 @@
-import React, { useEffect, useRef } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  Animated,
-  StatusBar,
-  Image,
-  Easing,
-} from 'react-native';
+import React, {useEffect, useRef} from 'react';
+import {View, StyleSheet, Animated, StatusBar, Image} from 'react-native';
 
 export default function SplashScreen() {
   const fade = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
     if (Animated && Animated.timing) {
-      Animated.timing(fade, { 
-        toValue: 1, 
-        duration: 450, 
-        useNativeDriver: true 
+      Animated.timing(fade, {
+        toValue: 1,
+        duration: 450,
+        useNativeDriver: true,
       }).start();
     }
   }, [fade]);
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="dark-content" backgroundColor="#FFFFFF" translucent={false} />
+      <StatusBar
+        barStyle="dark-content"
+        backgroundColor="#FFFFFF"
+        translucent={false}
+      />
 
       {/* Background layer */}
       <View style={styles.background} />
 
-      <Animated.View
-        style={[styles.content, { opacity: fade }]}>
+      <Animated.View style={[styles.content, {opacity: fade}]}>
         <View style={styles.logoWrapper}>
           <Image
             source={require('../assests/logo-lotus-smr.png')}
@@ -72,7 +67,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginBottom: 24,
     shadowColor: '#1B3A2D',
-    shadowOffset: { width: 0, height: 8 },
+    shadowOffset: {width: 0, height: 8},
     shadowOpacity: 0.1,
     shadowRadius: 15,
     elevation: 10,

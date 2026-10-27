@@ -1,21 +1,27 @@
-import { useNetInfo } from "@react-native-community/netinfo";
+import {useState, useEffect, useRef} from 'react';
+import NetInfo from '@react-native-community/netinfo';
 
 const useNetworkStatus = () => {
-  const netInfo = useNetInfo();
+  const [isOnline, setIsOnline] = useState(true);
+  const [isCompletelyOffline, setIsCompletelyOffline] = useState(false);
+  const prevState = useRef(null);
 
-  // Initially, before we have Network details, assume true so we don't flash offline states.
-  if (netInfo.isConnected === null) {
-    return { isOnline: true, isSlow: false, isCompletelyOffline: false };
-  }
+  useEffect(() => {
+    const unsubscribe = NetInfo.addEventListener(state => {
+      const currentIsConnected = state.isConnected === true;
+      if (prevState.current !== currentIsConnected) {
+        prevState.current = currentIsConnected;
+        setIsOnline(currentIsConnected);
+        setIsCompletelyOffline(!currentIsConnected);
+      }
+    });
 
-  const isCompletelyOffline = netInfo.isConnected === false;
-  
-  const isSlow = false; // Slow network blocking removed
-                 
-  // Online if not completely offline
-  const isOnline = !isCompletelyOffline;
+    return () => {
+      unsubscribe();
+    };
+  }, []);
 
-  return { isOnline, isSlow, isCompletelyOffline };
+  return {isOnline, isSlow: false, isCompletelyOffline};
 };
 
 export default useNetworkStatus;

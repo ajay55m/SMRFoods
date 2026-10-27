@@ -6,9 +6,6 @@
         <!-- Customize your theme here. -->
         <item name="android:editTextBackground">@drawable/rn_edit_text_material</item>
         <item name="android:windowBackground">@android:color/white</item>
-        
-        <!-- Android 15 Edge-to-Edge enforcement requirement -->
-        <item name="android:windowLayoutInDisplayCutoutMode">always</item>
     </style>
 
 </resources>

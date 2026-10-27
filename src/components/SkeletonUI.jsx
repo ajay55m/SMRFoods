@@ -1,11 +1,11 @@
-import React, { useEffect, useRef } from 'react';
-import { View, Animated, StyleSheet } from 'react-native';
+import React, {useEffect, useRef} from 'react';
+import {Animated, StyleSheet} from 'react-native';
 
-const SkeletonUI = ({ width, height, borderRadius, style }) => {
+const SkeletonUI = ({width, height, borderRadius, style}) => {
   const opacity = useRef(new Animated.Value(0.3)).current;
 
   useEffect(() => {
-    Animated.loop(
+    const anim = Animated.loop(
       Animated.sequence([
         Animated.timing(opacity, {
           toValue: 0.7,
@@ -17,15 +17,17 @@ const SkeletonUI = ({ width, height, borderRadius, style }) => {
           duration: 800,
           useNativeDriver: true,
         }),
-      ])
-    ).start();
+      ]),
+    );
+    anim.start();
+    return () => anim.stop();
   }, [opacity]);
 
   return (
     <Animated.View
       style={[
         styles.skeleton,
-        { width, height, borderRadius: borderRadius || 4, opacity },
+        {width, height, borderRadius: borderRadius || 4, opacity},
         style,
       ]}
     />

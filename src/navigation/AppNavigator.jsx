@@ -22,7 +22,7 @@ export default function AppNavigator() {
   const {user, isLoading} = useAuth();
   return (
     <NavigationContainer theme={MyTheme}>
-      <Stack.Navigator screenOptions={{headerShown: false, animation: 'fade'}}>
+      <Stack.Navigator screenOptions={{headerShown: false, animation: 'none'}}>
         {isLoading ? (
           <Stack.Screen name="Splash" component={SplashScreen} />
         ) : user ? (

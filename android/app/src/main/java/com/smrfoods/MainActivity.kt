@@ -13,8 +13,9 @@ class MainActivity : ReactActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(null)
-        // Extra insurance to make sure debugging is on
-        WebView.setWebContentsDebuggingEnabled(true)
+        try {
+            WebView.setWebContentsDebuggingEnabled(BuildConfig.DEBUG)
+        } catch (_: Exception) {}
     }
 
     override fun createReactActivityDelegate(): ReactActivityDelegate =

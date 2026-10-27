@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
   View,
   Text,
@@ -10,6 +10,7 @@ import {
   Easing,
   ActivityIndicator,
 } from 'react-native';
+import NetInfo from '@react-native-community/netinfo';
 import useNetworkStatus from '../hooks/useNetworkStatus';
 // import Header from '../components/Header';
 // import Footer from '../components/Footer';
@@ -22,17 +23,15 @@ const INNER_HEADER_ESTIMATE = 56;
 
 const NoInternetConnectionWrapper = ({
   children,
-  onHeaderPress,
-  onHeaderNavigate,
-  onFooterPress,
-  showMenu = true,
   onRetry,
   onRestore,
   suppressInnerHeaderFooter = false,
   headerOffset,
-  isLoading = false,
 }) => {
-  const { isOnline, isSlow: networkIsSlow } = useNetworkStatus() || { isOnline: true, isSlow: false };
+  const {isOnline} = useNetworkStatus() || {
+    isOnline: true,
+    isSlow: false,
+  };
   const [showOnlinePopup, setShowOnlinePopup] = useState(false);
   const [wasOffline, setWasOffline] = useState(false);
 
@@ -52,7 +51,8 @@ const NoInternetConnectionWrapper = ({
   // optional handle to clear fallback timeout
   const retryTimeoutRef = useRef(null);
 
-  const statusBarHeight = Platform.OS === 'android' ? StatusBar.currentHeight || 24 : 20;
+  const statusBarHeight =
+    Platform.OS === 'android' ? StatusBar.currentHeight || 24 : 20;
 
   useEffect(() => {
     // ONLINE popup flow (shows briefly when we come back online)
@@ -111,7 +111,7 @@ const NoInternetConnectionWrapper = ({
           setShowOnlinePopup(false);
           setWasOffline(false);
         });
-      }, 2000);
+      }, 3000);
 
       return () => clearTimeout(timer);
     }
@@ -157,7 +157,15 @@ const NoInternetConnectionWrapper = ({
         }),
       ]).start();
     }
-  }, [isOnline, wasOffline, slideOnline, fadeOnline, slideOffline, fadeOffline]);
+  }, [
+    isOnline,
+    wasOffline,
+    slideOnline,
+    fadeOnline,
+    slideOffline,
+    fadeOffline,
+    onRestore,
+  ]);
 
   // clear retry fallback timeout on unmount
   useEffect(() => {
@@ -181,23 +189,30 @@ const NoInternetConnectionWrapper = ({
   }, [isOnline, retryLoading]);
 
   const handleRetry = async () => {
-    if (retryLoading) return; // ignore double taps
+    if (retryLoading) {
+      return;
+    } // ignore double taps
     setRetryLoading(true);
 
     try {
-      // If onRetry returns a Promise, await it. Otherwise, call and fallback to timeout.
-      const result = onRetry && onRetry();
+      const state = await NetInfo.fetch();
+      if (state.isConnected) {
+        // If onRetry returns a Promise, await it. Otherwise, call and fallback to timeout.
+        const result = onRetry && onRetry();
 
-      if (result && typeof result.then === 'function') {
-        // onRetry returned a promise — await it
-        await result;
-        // after resolve we'll wait a short moment for network to update (or rely on isOnline useEffect)
+        if (result && typeof result.then === 'function') {
+          // onRetry returned a promise — await it
+          await result;
+          // after resolve we'll wait a short moment for network to update (or rely on isOnline useEffect)
+        } else {
+          // onRetry is sync — keep loading for a fallback duration in case network check is async
+          retryTimeoutRef.current = setTimeout(() => {
+            setRetryLoading(false);
+            retryTimeoutRef.current = null;
+          }, 6000); // 6s fallback
+        }
       } else {
-        // onRetry is sync — keep loading for a fallback duration in case network check is async
-        retryTimeoutRef.current = setTimeout(() => {
-          setRetryLoading(false);
-          retryTimeoutRef.current = null;
-        }, 6000); // 6s fallback
+        setRetryLoading(false);
       }
     } catch (err) {
       // if onRetry threw or rejected, stop loading
@@ -209,17 +224,13 @@ const NoInternetConnectionWrapper = ({
     }
   };
 
-  // Make header/footer interactive only when online
-  const headerPointer = isOnline ? 'auto' : 'none';
-  const footerPointer = isOnline ? 'auto' : 'none';
-  const headerOpacity = isOnline ? 1 : 0.98;
-  const footerOpacity = isOnline ? 1 : 0.98;
-
   // --- automatic detection of Header/Footer inside children (so we don't duplicate) ---
-  const hasInnerHeaderOrFooter = (nodes) => {
+  const hasInnerHeaderOrFooter = nodes => {
     let found = false;
-    React.Children.forEach(nodes, (child) => {
-      if (!child || found) return;
+    React.Children.forEach(nodes, child => {
+      if (!child || found) {
+        return;
+      }
       if (typeof child === 'object' && child.type) {
         const type = child.type;
         const typeName =
@@ -249,7 +260,8 @@ const NoInternetConnectionWrapper = ({
   };
 
   const detectedInnerHF = hasInnerHeaderOrFooter(children);
-  const renderWrapperHeaderFooter = !suppressInnerHeaderFooter && !detectedInnerHF;
+  const renderWrapperHeaderFooter =
+    !suppressInnerHeaderFooter && !detectedInnerHF;
   // ----------------------------------------------------------------------
 
   // compute popup top offset so it appears below the header
@@ -273,7 +285,10 @@ const NoInternetConnectionWrapper = ({
 
   return (
     <View style={styles.container}>
-      <StatusBar backgroundColor={isOnline ? '#e8f5e9' : '#fff'} barStyle="dark-content" />
+      <StatusBar
+        backgroundColor={isOnline ? '#e8f5e9' : '#fff'}
+        barStyle="dark-content"
+      />
 
       {/* Wrapper Header */}
       {/* {renderWrapperHeaderFooter && (
@@ -292,24 +307,31 @@ const NoInternetConnectionWrapper = ({
           style={[
             styles.offlinePopup,
             {
-              transform: [{ translateY: slideOffline }],
+              transform: [{translateY: slideOffline}],
               opacity: fadeOffline,
               top: popupTop,
             },
-          ]}
-        >
+          ]}>
           <View style={styles.offlineInner}>
-            <Text style={styles.offlineText}>⚠️ You are offline — check your connection</Text>
+            <Text style={styles.offlineText}>
+              ⚠️ You are offline — check your connection
+            </Text>
 
             <TouchableOpacity
-              style={[styles.offlineRetry, retryLoading && styles.offlineRetryDisabled]}
+              style={[
+                styles.offlineRetry,
+                retryLoading && styles.offlineRetryDisabled,
+              ]}
               onPress={handleRetry}
               activeOpacity={0.8}
-              disabled={retryLoading}
-            >
+              disabled={retryLoading}>
               {retryLoading ? (
                 <View style={styles.retryContent}>
-                  <ActivityIndicator size="small" color="#fff" style={{ marginRight: 8 }} />
+                  <ActivityIndicator
+                    size="small"
+                    color="#fff"
+                    style={styles.retrySpinner}
+                  />
                   <Text style={styles.offlineRetryText}>Checking...</Text>
                 </View>
               ) : (
@@ -327,13 +349,14 @@ const NoInternetConnectionWrapper = ({
           style={[
             styles.onlinePopup,
             {
-              transform: [{ translateY: slideOnline }],
+              transform: [{translateY: slideOnline}],
               opacity: fadeOnline,
               top: popupTop,
             },
-          ]}
-        >
-          <Text style={styles.onlineText}>✓ Back online — connection restored</Text>
+          ]}>
+          <Text style={styles.onlineText}>
+            ✓ Back online — connection restored
+          </Text>
         </Animated.View>
       )}
 
@@ -341,24 +364,27 @@ const NoInternetConnectionWrapper = ({
       <View
         style={[
           styles.contentArea,
-          renderWrapperHeaderFooter ? { marginTop: 0, marginBottom: 0 } : { marginTop: 0, marginBottom: 0 },
-        ]}
-      >
+          renderWrapperHeaderFooter
+            ? styles.wrapperContentSpacing
+            : styles.wrapperContentSpacing,
+        ]}>
         <View style={styles.childrenContainer}>
           {isSlow ? (
             <View style={styles.blockedContent}>
-               <ActivityIndicator size="large" color="#000" />
-               <Text style={styles.blockedText}>Connection too slow</Text>
-               <Text style={styles.blockedSubText}>Please use 4G, 5G or Wi-Fi</Text>
-               <TouchableOpacity
-                 style={styles.slowRetryButton}
-                 onPress={() => {
-                   if (timeoutSlow) setTimeoutSlow(false);
-                   if (onRetry) onRetry();
-                 }}
-               >
-                 <Text style={styles.slowRetryText}>↻ Try Again</Text>
-               </TouchableOpacity>
+              <ActivityIndicator size="large" color="#000" />
+              <Text style={styles.blockedText}>Connection too slow</Text>
+              <Text style={styles.blockedSubText}>
+                Please use 4G, 5G or Wi-Fi
+              </Text>
+              <TouchableOpacity
+                style={styles.slowRetryButton}
+                onPress={() => {
+                  if (onRetry) {
+                    onRetry();
+                  }
+                }}>
+                <Text style={styles.slowRetryText}>↻ Try Again</Text>
+              </TouchableOpacity>
             </View>
           ) : (
             children
@@ -422,7 +448,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 6 },
+    shadowOffset: {width: 0, height: 6},
     shadowOpacity: 0.12,
     shadowRadius: 12,
     elevation: 12,
@@ -444,7 +470,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     zIndex: 2000,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 6 },
+    shadowOffset: {width: 0, height: 6},
     shadowOpacity: 0.12,
     shadowRadius: 12,
     elevation: 12,
@@ -482,6 +508,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  retrySpinner: {
+    marginRight: 8,
+  },
+  wrapperContentSpacing: {
+    marginTop: 0,
+    marginBottom: 0,
   },
   blockedContent: {
     flex: 1,

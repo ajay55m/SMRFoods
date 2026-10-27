@@ -8,7 +8,7 @@ import {
   SafeAreaView,
   Image,
 } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import NoInternetConnectionWrapper from '../components/NoInternetConnectionWrapper';
 
 const COLORS = {
@@ -21,7 +21,7 @@ const COLORS = {
   border: '#E5E7EB',
 };
 
-const ServerSlowScreen = ({ onRetryOverride }) => {
+const ServerSlowScreen = ({onRetryOverride}) => {
   const navigation = useNavigation();
 
   const handleTryAgain = () => {
@@ -59,7 +59,7 @@ const ServerSlowScreen = ({ onRetryOverride }) => {
                 resizeMode="contain"
               />
               <View style={styles.statusBadge}>
-                <Text style={{ fontSize: 18 }}>📡</Text>
+                <Text style={styles.statusBadgeIcon}>📡</Text>
               </View>
             </View>
           </View>
@@ -71,7 +71,8 @@ const ServerSlowScreen = ({ onRetryOverride }) => {
           </View>
           <Text style={styles.titleText}>Connection lost</Text>
           <Text style={styles.subtitleText}>
-            To ensure your orders are processed correctly, SMR Foods requires a stable 4G, 5G, or Wi-Fi connection.
+            To ensure your orders are processed correctly, SMR Foods requires a
+            stable 4G, 5G, or Wi-Fi connection.
           </Text>
         </View>
 
@@ -79,8 +80,7 @@ const ServerSlowScreen = ({ onRetryOverride }) => {
           <TouchableOpacity
             onPress={handleTryAgain}
             style={styles.actionButton}
-            activeOpacity={0.9}
-          >
+            activeOpacity={0.9}>
             <Text style={styles.actionButtonText}>↻ TRY AGAIN</Text>
           </TouchableOpacity>
 
@@ -90,7 +90,9 @@ const ServerSlowScreen = ({ onRetryOverride }) => {
     </SafeAreaView>
   );
 
-  if (onRetryOverride) return content;
+  if (onRetryOverride) {
+    return content;
+  }
 
   return (
     <NoInternetConnectionWrapper onRetry={handleTryAgain}>
@@ -144,7 +146,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     elevation: 10,
     shadowColor: COLORS.primary,
-    shadowOffset: { width: 0, height: 10 },
+    shadowOffset: {width: 0, height: 10},
     shadowOpacity: 0.1,
     shadowRadius: 15,
   },
@@ -165,6 +167,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderWidth: 3,
     borderColor: COLORS.white,
+  },
+  statusBadgeIcon: {
+    fontSize: 18,
   },
   infoSection: {
     alignItems: 'center',
@@ -221,7 +226,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: '#9CA3AF',
     letterSpacing: 1,
-  }
+  },
 });
 
 export default ServerSlowScreen;

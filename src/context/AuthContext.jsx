@@ -8,13 +8,17 @@
  * Only way to reach LoginScreen is: never logged in, or manual Logout.
  */
 
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, {createContext, useContext, useState, useEffect} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { autoLogin, saveCredentials, clearCredentials, parseCookies } from '../services/authService';
+import {
+  autoLogin,
+  saveCredentials,
+  clearCredentials,
+} from '../services/authService';
 
 const AuthContext = createContext(null);
 
-export const AuthProvider = ({ children }) => {
+export const AuthProvider = ({children}) => {
   const [user, setUser] = useState(null);
   const [sessionCookies, setSessionCookies] = useState('');
   const [dashboardUrl, setDashboardUrl] = useState('');
@@ -58,19 +62,36 @@ export const AuthProvider = ({ children }) => {
 
   /** Called by LoginScreen after successful manual login. */
   const signIn = async (username, password, cookies, url) => {
-    const userData = { username, loginTime: Date.now() };
-    // Save everything
-    await saveCredentials(username, password);   // Keychain (for re-login)
-    await AsyncStorage.setItem('@smr_user', JSON.stringify(userData));
-    await AsyncStorage.setItem('@smr_cookies', cookies);
-    await AsyncStorage.setItem('@smr_dashboard', url);
+    const safeUrl =
+      typeof url === 'string' && url.trim().length > 0
+        ? url.trim()
+        : 'https://smrfoodsmills.com/smrapp/app_mobile_view/category.php';
+    const safeCookies = typeof cookies === 'string' ? cookies : '';
+    const userData = {username: username || '', loginTime: Date.now()};
+
+    try {
+      await saveCredentials(username || '', password || '');
+    } catch (e) {
+      console.warn('saveCredentials error:', e);
+    }
+
+    try {
+      await AsyncStorage.multiSet([
+        ['@smr_user', JSON.stringify(userData)],
+        ['@smr_cookies', safeCookies],
+        ['@smr_dashboard', safeUrl],
+      ]);
+    } catch (e) {
+      console.warn('AsyncStorage save error:', e);
+    }
+
     setUser(userData);
-    setSessionCookies(cookies);
-    setDashboardUrl(url);
+    setSessionCookies(safeCookies);
+    setDashboardUrl(safeUrl);
   };
 
   /** Called by WebViewScreen after a mid-session silent re-auth. */
-  const updateCookies = async (freshCookies) => {
+  const updateCookies = async freshCookies => {
     setSessionCookies(freshCookies);
     await AsyncStorage.setItem('@smr_cookies', freshCookies);
   };
@@ -80,20 +101,33 @@ export const AuthProvider = ({ children }) => {
     setUser(null);
     setSessionCookies('');
     setDashboardUrl('');
-    await clearCredentials();   // Keychain
-    await AsyncStorage.multiRemove(['@smr_user', '@smr_cookies', '@smr_dashboard']);
+    try {
+      await clearCredentials(); // Keychain
+    } catch (e) {
+      console.warn('Keychain clear error:', e);
+    }
+    try {
+      await AsyncStorage.multiRemove([
+        '@smr_user',
+        '@smr_cookies',
+        '@smr_dashboard',
+      ]);
+    } catch (e) {
+      console.warn('AsyncStorage clear error:', e);
+    }
   };
 
   return (
-    <AuthContext.Provider value={{
-      user,
-      sessionCookies,
-      dashboardUrl,
-      isLoading,
-      signIn,
-      signOut,
-      updateCookies,
-    }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        sessionCookies,
+        dashboardUrl,
+        isLoading,
+        signIn,
+        signOut,
+        updateCookies,
+      }}>
       {children}
     </AuthContext.Provider>
   );
@@ -101,6 +135,8 @@ export const AuthProvider = ({ children }) => {
 
 export const useAuth = () => {
   const ctx = useContext(AuthContext);
-  if (!ctx) throw new Error('useAuth must be used within AuthProvider');
+  if (!ctx) {
+    throw new Error('useAuth must be used within AuthProvider');
+  }
   return ctx;
 };

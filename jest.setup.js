@@ -14,4 +14,21 @@ jest.mock('react-native-keychain', () => ({
   resetGenericPassword: jest.fn(),
 }));
 
-jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper');
+jest.mock('react-native-device-info', () => ({
+  getVersion: jest.fn(() => '1.0.19'),
+  getBuildNumber: jest.fn(() => '20'),
+}));
+
+jest.mock('sp-react-native-in-app-updates', () => {
+  return {
+    __esModule: true,
+    default: jest.fn().mockImplementation(() => ({
+      checkNeedsUpdate: jest.fn().mockResolvedValue({ shouldUpdate: false }),
+      startUpdate: jest.fn(),
+    })),
+    IAUUpdateKind: {
+      FLEXIBLE: 0,
+      IMMEDIATE: 1,
+    },
+  };
+});

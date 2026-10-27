@@ -29,60 +29,69 @@ exports[`LoginScreen renders correctly and matches snapshot 1`] = `
         }
       }
     >
-      <View
-        onLayout={[Function]}
+      <RNCSafeAreaView
+        edges={
+          {
+            "bottom": "additive",
+            "left": "off",
+            "right": "off",
+            "top": "additive",
+          }
+        }
         style={
-          [
-            {
-              "flex": 1,
-            },
-            {
-              "paddingBottom": 0,
-            },
-          ]
+          {
+            "flex": 1,
+          }
         }
       >
         <View
+          onLayout={[Function]}
           style={
-            {
-              "backgroundColor": "#d9d9d9ff",
-              "bottom": 0,
-              "left": 0,
-              "position": "absolute",
-              "right": 0,
-              "top": 0,
-            }
+            [
+              {
+                "flex": 1,
+              },
+              {
+                "paddingBottom": 0,
+              },
+            ]
           }
-        />
-        <RCTScrollView
-          contentContainerStyle={
-            {
-              "flexGrow": 1,
-              "justifyContent": "center",
-              "padding": 20,
-              "paddingTop": 60,
-            }
-          }
-          keyboardShouldPersistTaps="handled"
-          showsVerticalScrollIndicator={false}
         >
-          <View>
-            <View
-              style={
-                {
-                  "alignSelf": "center",
-                  "maxWidth": 400,
-                  "width": "100%",
-                }
+          <View
+            style={
+              {
+                "backgroundColor": "#d9d9d9ff",
+                "bottom": 0,
+                "left": 0,
+                "position": "absolute",
+                "right": 0,
+                "top": 0,
               }
-            >
+            }
+          />
+          <RCTScrollView
+            alwaysBounceHorizontal={false}
+            contentContainerStyle={
+              {
+                "flexGrow": 1,
+                "justifyContent": "center",
+                "padding": 20,
+                "paddingTop": 60,
+              }
+            }
+            horizontal={false}
+            keyboardShouldPersistTaps="handled"
+            overScrollMode="never"
+            showsHorizontalScrollIndicator={false}
+            showsVerticalScrollIndicator={false}
+          >
+            <View>
               <View
                 style={
                   {
-                    "alignItems": "center",
-                    "elevation": 10,
-                    "marginBottom": -60,
-                    "zIndex": 10,
+                    "alignSelf": "center",
+                    "maxWidth": 400,
+                    "width": "100%",
                   }
                 }
               >
@@ -90,320 +99,9 @@ exports[`LoginScreen renders correctly and matches snapshot 1`] = `
                   style={
                     {
                       "alignItems": "center",
-                      "backgroundColor": "#fff",
-                      "borderColor": "#F2F4F3",
-                      "borderRadius": 36,
-                      "borderWidth": 1,
-                      "elevation": 12,
-                      "height": 140,
-                      "justifyContent": "center",
-                      "shadowColor": "#000",
-                      "shadowOffset": {
-                        "height": 8,
-                        "width": 0,
-                      },
-                      "shadowOpacity": 0.15,
-                      "shadowRadius": 16,
-                      "width": 140,
-                    }
-                  }
-                >
-                  <Image
-                    resizeMode="contain"
-                    source={
-                      {
-                        "testUri": "../../../src/assests/logo-lotus-smr.png",
-                      }
-                    }
-                    style={
-                      {
-                        "height": 100,
-                        "width": 100,
-                      }
-                    }
-                  />
-                </View>
-              </View>
-              <View
-                collapsable={false}
-                style={
-                  {
-                    "backgroundColor": "#fff",
-                    "borderRadius": 24,
-                    "elevation": 5,
-                    "padding": 28,
-                    "paddingTop": 80,
-                    "shadowColor": "#000",
-                    "shadowOffset": {
-                      "height": 10,
-                      "width": 0,
-                    },
-                    "shadowOpacity": 0.1,
-                    "shadowRadius": 20,
-                    "transform": [
-                      {
-                        "translateX": 0,
-                      },
-                    ],
-                  }
-                }
-              >
-                <Text
-                  style={
-                    {
-                      "color": "#111827",
-                      "fontSize": 22,
-                      "fontWeight": "800",
-                      "marginBottom": 8,
-                    }
-                  }
-                >
-                  Login
-                </Text>
-                <Text
-                  style={
-                    {
-                      "color": "#6B7280",
-                      "fontSize": 13,
-                      "lineHeight": 18,
-                      "marginBottom": 28,
-                    }
-                  }
-                >
-                  Authorized terminal access for SMR operations.
-                </Text>
-                <View
-                  style={
-                    {
-                      "marginBottom": 20,
-                    }
-                  }
-                >
-                  <Text
-                    style={
-                      {
-                        "color": "#2D4F3E",
-                        "fontSize": 11,
-                        "fontWeight": "700",
-                        "letterSpacing": 0.5,
-                        "marginBottom": 6,
-                      }
-                    }
-                  >
-                    USERNAME
-                  </Text>
-                  <View
-                    style={
-                      [
-                        {
-                          "alignItems": "center",
-                          "backgroundColor": "#F2F4F3",
-                          "borderColor": "transparent",
-                          "borderRadius": 12,
-                          "borderWidth": 1.5,
-                          "flexDirection": "row",
-                          "height": 52,
-                          "paddingHorizontal": 14,
-                        },
-                        false,
-                        undefined,
-                      ]
-                    }
-                  >
-                    <Text
-                      style={
-                        {
-                          "fontSize": 18,
-                          "marginRight": 10,
-                          "opacity": 0.7,
-                        }
-                      }
-                    >
-                      👤
-                    </Text>
-                    <TextInput
-                      autoCapitalize="none"
-                      onBlur={[Function]}
-                      onChangeText={[Function]}
-                      onFocus={[Function]}
-                      onSubmitEditing={[Function]}
-                      placeholder="Username"
-                      placeholderTextColor="#9CA3AF"
-                      returnKeyType="next"
-                      style={
-                        {
-                          "color": "#111827",
-                          "flex": 1,
-                          "fontSize": 14,
-                          "fontWeight": "600",
-                          "paddingVertical": 0,
-                        }
-                      }
-                      value=""
-                    />
-                  </View>
-                </View>
-                <View
-                  style={
-                    {
-                      "marginBottom": 20,
-                    }
-                  }
-                >
-                  <Text
-                    style={
-                      {
-                        "color": "#2D4F3E",
-                        "fontSize": 11,
-                        "fontWeight": "700",
-                        "letterSpacing": 0.5,
-                        "marginBottom": 6,
-                      }
-                    }
-                  >
-                    PASSWORD
-                  </Text>
-                  <View
-                    style={
-                      [
-                        {
-                          "alignItems": "center",
-                          "backgroundColor": "#F2F4F3",
-                          "borderColor": "transparent",
-                          "borderRadius": 12,
-                          "borderWidth": 1.5,
-                          "flexDirection": "row",
-                          "height": 52,
-                          "paddingHorizontal": 14,
-                        },
-                        false,
-                        undefined,
-                      ]
-                    }
-                  >
-                    <Text
-                      style={
-                        {
-                          "fontSize": 18,
-                          "marginRight": 10,
-                          "opacity": 0.7,
-                        }
-                      }
-                    >
-                      🔑
-                    </Text>
-                    <TextInput
-                      onBlur={[Function]}
-                      onChangeText={[Function]}
-                      onFocus={[Function]}
-                      onSubmitEditing={[Function]}
-                      placeholder="••••••••••••"
-                      placeholderTextColor="#9CA3AF"
-                      returnKeyType="done"
-                      secureTextEntry={true}
-                      style={
-                        {
-                          "color": "#111827",
-                          "flex": 1,
-                          "fontSize": 14,
-                          "fontWeight": "600",
-                          "paddingVertical": 0,
-                        }
-                      }
-                      value=""
-                    />
-                    <View
-                      accessibilityState={
-                        {
-                          "busy": undefined,
-                          "checked": undefined,
-                          "disabled": undefined,
-                          "expanded": undefined,
-                          "selected": undefined,
-                        }
-                      }
-                      accessibilityValue={
-                        {
-                          "max": undefined,
-                          "min": undefined,
-                          "now": undefined,
-                          "text": undefined,
-                        }
-                      }
-                      accessible={true}
-                      collapsable={false}
-                      focusable={true}
-                      onClick={[Function]}
-                      onResponderGrant={[Function]}
-                      onResponderMove={[Function]}
-                      onResponderRelease={[Function]}
-                      onResponderTerminate={[Function]}
-                      onResponderTerminationRequest={[Function]}
-                      onStartShouldSetResponder={[Function]}
-                      style={
-                        {
-                          "opacity": 1,
-                          "padding": 6,
-                        }
-                      }
-                    >
-                      <Text
-                        style={
-                          {
-                            "fontSize": 16,
-                            "opacity": 0.5,
-                          }
-                        }
-                      >
-                        👁️
-                      </Text>
-                    </View>
-                  </View>
-                </View>
-                <View
-                  accessibilityState={
-                    {
-                      "busy": undefined,
-                      "checked": undefined,
-                      "disabled": false,
-                      "expanded": undefined,
-                      "selected": undefined,
-                    }
-                  }
-                  accessibilityValue={
-                    {
-                      "max": undefined,
-                      "min": undefined,
-                      "now": undefined,
-                      "text": undefined,
-                    }
-                  }
-                  accessible={true}
-                  collapsable={false}
-                  focusable={true}
-                  onClick={[Function]}
-                  onResponderGrant={[Function]}
-                  onResponderMove={[Function]}
-                  onResponderRelease={[Function]}
-                  onResponderTerminate={[Function]}
-                  onResponderTerminationRequest={[Function]}
-                  onStartShouldSetResponder={[Function]}
-                  style={
-                    {
-                      "alignItems": "center",
-                      "backgroundColor": "#B32A4A",
-                      "borderRadius": 14,
-                      "elevation": 6,
-                      "height": 54,
-                      "justifyContent": "center",
-                      "opacity": 1,
-                      "shadowColor": "#B32A4A",
-                      "shadowOffset": {
-                        "height": 4,
-                        "width": 0,
-                      },
-                      "shadowOpacity": 0.3,
-                      "shadowRadius": 8,
+                      "elevation": 10,
+                      "marginBottom": -60,
+                      "zIndex": 10,
                     }
                   }
                 >
@@ -411,39 +109,376 @@ exports[`LoginScreen renders correctly and matches snapshot 1`] = `
                     style={
                       {
                         "alignItems": "center",
-                        "flexDirection": "row",
+                        "backgroundColor": "#fff",
+                        "borderColor": "#F2F4F3",
+                        "borderRadius": 36,
+                        "borderWidth": 1,
+                        "elevation": 12,
+                        "height": 140,
+                        "justifyContent": "center",
+                        "shadowColor": "#000",
+                        "shadowOffset": {
+                          "height": 8,
+                          "width": 0,
+                        },
+                        "shadowOpacity": 0.15,
+                        "shadowRadius": 16,
+                        "width": 140,
+                      }
+                    }
+                  >
+                    <Image
+                      resizeMode="contain"
+                      source={
+                        {
+                          "testUri": "../../../src/assests/logo-lotus-smr.png",
+                        }
+                      }
+                      style={
+                        {
+                          "height": 100,
+                          "width": 100,
+                        }
+                      }
+                    />
+                  </View>
+                </View>
+                <View
+                  collapsable={false}
+                  style={
+                    {
+                      "backgroundColor": "#fff",
+                      "borderRadius": 24,
+                      "elevation": 5,
+                      "padding": 28,
+                      "paddingTop": 80,
+                      "shadowColor": "#000",
+                      "shadowOffset": {
+                        "height": 10,
+                        "width": 0,
+                      },
+                      "shadowOpacity": 0.1,
+                      "shadowRadius": 20,
+                      "transform": [
+                        {
+                          "translateX": 0,
+                        },
+                      ],
+                    }
+                  }
+                >
+                  <Text
+                    style={
+                      {
+                        "color": "#111827",
+                        "fontSize": 22,
+                        "fontWeight": "800",
+                        "marginBottom": 8,
+                      }
+                    }
+                  >
+                    Login
+                  </Text>
+                  <Text
+                    style={
+                      {
+                        "color": "#6B7280",
+                        "fontSize": 13,
+                        "lineHeight": 18,
+                        "marginBottom": 28,
+                      }
+                    }
+                  >
+                    Authorized terminal access for SMR operations.
+                  </Text>
+                  <View
+                    style={
+                      {
+                        "marginBottom": 20,
                       }
                     }
                   >
                     <Text
                       style={
                         {
-                          "color": "#fff",
-                          "fontSize": 15,
-                          "fontWeight": "bold",
-                          "marginRight": 6,
+                          "color": "#2D4F3E",
+                          "fontSize": 11,
+                          "fontWeight": "700",
+                          "letterSpacing": 0.5,
+                          "marginBottom": 6,
                         }
                       }
                     >
-                      Sign In
+                      USERNAME
                     </Text>
+                    <View
+                      style={
+                        [
+                          {
+                            "alignItems": "center",
+                            "backgroundColor": "#F2F4F3",
+                            "borderColor": "transparent",
+                            "borderRadius": 12,
+                            "borderWidth": 1.5,
+                            "flexDirection": "row",
+                            "height": 52,
+                            "paddingHorizontal": 14,
+                          },
+                          false,
+                          undefined,
+                        ]
+                      }
+                    >
+                      <Text
+                        style={
+                          {
+                            "fontSize": 18,
+                            "marginRight": 10,
+                            "opacity": 0.7,
+                          }
+                        }
+                      >
+                        👤
+                      </Text>
+                      <TextInput
+                        autoCapitalize="none"
+                        onBlur={[Function]}
+                        onChangeText={[Function]}
+                        onFocus={[Function]}
+                        onSubmitEditing={[Function]}
+                        placeholder="Username"
+                        placeholderTextColor="#9CA3AF"
+                        returnKeyType="next"
+                        style={
+                          {
+                            "color": "#111827",
+                            "flex": 1,
+                            "fontSize": 14,
+                            "fontWeight": "600",
+                            "paddingVertical": 0,
+                          }
+                        }
+                        value=""
+                      />
+                    </View>
+                  </View>
+                  <View
+                    style={
+                      {
+                        "marginBottom": 20,
+                      }
+                    }
+                  >
                     <Text
                       style={
                         {
-                          "color": "#fff",
-                          "fontSize": 16,
+                          "color": "#2D4F3E",
+                          "fontSize": 11,
+                          "fontWeight": "700",
+                          "letterSpacing": 0.5,
+                          "marginBottom": 6,
                         }
                       }
                     >
-                      →
+                      PASSWORD
                     </Text>
+                    <View
+                      style={
+                        [
+                          {
+                            "alignItems": "center",
+                            "backgroundColor": "#F2F4F3",
+                            "borderColor": "transparent",
+                            "borderRadius": 12,
+                            "borderWidth": 1.5,
+                            "flexDirection": "row",
+                            "height": 52,
+                            "paddingHorizontal": 14,
+                          },
+                          false,
+                          undefined,
+                        ]
+                      }
+                    >
+                      <Text
+                        style={
+                          {
+                            "fontSize": 18,
+                            "marginRight": 10,
+                            "opacity": 0.7,
+                          }
+                        }
+                      >
+                        🔑
+                      </Text>
+                      <TextInput
+                        onBlur={[Function]}
+                        onChangeText={[Function]}
+                        onFocus={[Function]}
+                        onSubmitEditing={[Function]}
+                        placeholder="••••••••••••"
+                        placeholderTextColor="#9CA3AF"
+                        returnKeyType="done"
+                        secureTextEntry={true}
+                        style={
+                          {
+                            "color": "#111827",
+                            "flex": 1,
+                            "fontSize": 14,
+                            "fontWeight": "600",
+                            "paddingVertical": 0,
+                          }
+                        }
+                        value=""
+                      />
+                      <View
+                        accessibilityState={
+                          {
+                            "busy": undefined,
+                            "checked": undefined,
+                            "disabled": undefined,
+                            "expanded": undefined,
+                            "selected": undefined,
+                          }
+                        }
+                        accessibilityValue={
+                          {
+                            "max": undefined,
+                            "min": undefined,
+                            "now": undefined,
+                            "text": undefined,
+                          }
+                        }
+                        accessible={true}
+                        collapsable={false}
+                        focusable={true}
+                        onClick={[Function]}
+                        onResponderGrant={[Function]}
+                        onResponderMove={[Function]}
+                        onResponderRelease={[Function]}
+                        onResponderTerminate={[Function]}
+                        onResponderTerminationRequest={[Function]}
+                        onStartShouldSetResponder={[Function]}
+                        style={
+                          {
+                            "opacity": 1,
+                            "padding": 6,
+                          }
+                        }
+                      >
+                        <Text
+                          style={
+                            {
+                              "fontSize": 16,
+                              "opacity": 0.5,
+                            }
+                          }
+                        >
+                          👁️
+                        </Text>
+                      </View>
+                    </View>
                   </View>
+                  <View
+                    accessibilityState={
+                      {
+                        "busy": undefined,
+                        "checked": undefined,
+                        "disabled": false,
+                        "expanded": undefined,
+                        "selected": undefined,
+                      }
+                    }
+                    accessibilityValue={
+                      {
+                        "max": undefined,
+                        "min": undefined,
+                        "now": undefined,
+                        "text": undefined,
+                      }
+                    }
+                    accessible={true}
+                    collapsable={false}
+                    focusable={true}
+                    onClick={[Function]}
+                    onResponderGrant={[Function]}
+                    onResponderMove={[Function]}
+                    onResponderRelease={[Function]}
+                    onResponderTerminate={[Function]}
+                    onResponderTerminationRequest={[Function]}
+                    onStartShouldSetResponder={[Function]}
+                    style={
+                      {
+                        "alignItems": "center",
+                        "backgroundColor": "#B32A4A",
+                        "borderRadius": 14,
+                        "elevation": 6,
+                        "height": 54,
+                        "justifyContent": "center",
+                        "opacity": 1,
+                        "shadowColor": "#B32A4A",
+                        "shadowOffset": {
+                          "height": 4,
+                          "width": 0,
+                        },
+                        "shadowOpacity": 0.3,
+                        "shadowRadius": 8,
+                      }
+                    }
+                  >
+                    <View
+                      style={
+                        {
+                          "alignItems": "center",
+                          "flexDirection": "row",
+                        }
+                      }
+                    >
+                      <Text
+                        style={
+                          {
+                            "color": "#fff",
+                            "fontSize": 15,
+                            "fontWeight": "bold",
+                            "marginRight": 6,
+                          }
+                        }
+                      >
+                        Sign In
+                      </Text>
+                      <Text
+                        style={
+                          {
+                            "color": "#fff",
+                            "fontSize": 16,
+                          }
+                        }
+                      >
+                        →
+                      </Text>
+                    </View>
+                  </View>
+                  <Text
+                    style={
+                      {
+                        "color": "#9CA3AF",
+                        "fontSize": 12,
+                        "fontWeight": "500",
+                        "letterSpacing": 0.5,
+                        "marginTop": 24,
+                        "textAlign": "center",
+                      }
+                    }
+                  >
+                    App Version 
+                    1.0.19 (20)
+                  </Text>
                 </View>
               </View>
             </View>
-          </View>
-        </RCTScrollView>
-      </View>
+          </RCTScrollView>
+        </View>
+      </RNCSafeAreaView>
     </View>
   </View>
 </View>
